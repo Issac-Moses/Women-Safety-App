@@ -179,11 +179,11 @@ const EmergencyButton: React.FC = () => {
               
               <div className="flex space-x-3">
                 <button
-                  onClick={() => window.open(`tel:911`)}
+                  onClick={() => window.open(`tel:100`)}
                   className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center justify-center"
                 >
                   <Phone className="w-5 h-5 mr-2" />
-                  Call 911
+                  Call 100
                 </button>
                 <button
                   onClick={() => setShowConfirmation(false)}
