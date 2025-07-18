@@ -92,7 +92,7 @@ A comprehensive safety application designed to empower women with emergency tool
 ## 📬 Contact
 - 📧 Issac Moses – issacmoses19082005@gmail.com
 - 💼 [LinkedIn](https://www.linkedin.com/in/i%EF%BD%93%EF%BD%93-a-c-m-%E5%8F%A3%EF%BD%93%E3%83%A2%EF%BD%93-d-12837831b/)
-- 📧 Chilaka Deekshitha – 
+- 📧 Chilaka Deekshitha – uhhukju
 - 💼 [LinkedIn](https://www.linkedin.com/in/chilaka-deekshitha-974ba0329/)
 ---
 ## Contributing
