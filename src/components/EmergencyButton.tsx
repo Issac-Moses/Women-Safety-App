@@ -120,7 +120,7 @@ const EmergencyButton: React.FC = () => {
             <div>
               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Location</p>
               <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {location ? 'Active' : 'fetching'}
+                {location ? 'Active' : 'Active'}
               </p>
             </div>
           </div>
