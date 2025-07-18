@@ -1,0 +1,36 @@
+
+.leaflet-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  display: block;
+}
+
+
+.leaflet-container img.leaflet-tile {
+  image-rendering: crisp-edges;
+}
+
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: #555 !important;
+}
+.dark .leaflet-container a.leaflet-popup-close-button {
+  color: #ccc !important;
+}
+
+
+.leaflet-bar {
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4) !important;
+  border-radius: 4px !important;
+}
+
+
+.leaflet-marker-icon .leaflet-zoom-animated,
+.leaflet-marker-shadow .leaflet-zoom-animated {
+  will-change: transform;
+  backface-visibility: hidden;
+}
