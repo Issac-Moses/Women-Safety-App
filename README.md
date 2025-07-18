@@ -107,4 +107,4 @@ A comprehensive safety application designed to empower women with emergency tool
 ## Acknowledgments
 - Inspired by the need for women's safety solutions in Andhra Pradesh.
 - Special thanks to our beta testers and community supporters.
-- Icons by [Lucide](zhttps://lucide.dev/)
+- Icons by [Lucide](https://lucide.dev/)
