@@ -78,7 +78,7 @@ A comprehensive safety application designed to empower women with emergency tool
 
 ## Project Structure
 - ```bash
-    src/
+  src/
   ├── assets/            # Images and static files
   ├── components/        # Reusable components
   ├── contexts/          # Global state management
