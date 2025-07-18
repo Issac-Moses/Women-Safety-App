@@ -118,7 +118,7 @@ const EmergencyButton: React.FC = () => {
               <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Location</p>
+              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Area</p>
               <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 {location ? 'Active' : 'Active'}
               </p>
@@ -131,7 +131,7 @@ const EmergencyButton: React.FC = () => {
               <Shield className="w-5 h-5" />
             </div>
             <div>
-              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Contacts</p>
+              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Contact</p>
               <p className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 {user?.emergencyContacts?.length || 0} Only
               </p>
