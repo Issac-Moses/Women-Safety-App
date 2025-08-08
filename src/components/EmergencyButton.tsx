@@ -12,12 +12,43 @@ const EmergencyButton: React.FC = () => {
   const { user } = useAuth();
   const { location, getCurrentLocation } = useLocation();
   const { isDark } = useTheme();
+  const [headphoneConnected, setHeadphoneConnected] = useState(false);
 
-  // Handle Bluetooth headphone button press
+  // Check if Bluetooth headphones are connected
+  useEffect(() => {
+    const checkAudioDevices = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const hasBluetooth = devices.some(device => 
+          device.kind === 'audiooutput' && 
+          (device.label.toLowerCase().includes('bluetooth') || 
+           device.label.toLowerCase().includes('boult'))
+        );
+        setHeadphoneConnected(hasBluetooth);
+      } catch (error) {
+        console.error('Error checking audio devices:', error);
+      }
+    };
+
+    checkAudioDevices();
+
+    // Listen for device changes
+    navigator.mediaDevices.addEventListener('devicechange', checkAudioDevices);
+    return () => {
+      navigator.mediaDevices.removeEventListener('devicechange', checkAudioDevices);
+    };
+  }, []);
+
+  // Handle Bluetooth headphone button press (Boult Audio specific)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Check for media key events (play/pause button on headphones)
-      if (event.code === 'MediaPlayPause' || event.code === 'MediaTrackNext') {
+      // Common media keys
+      if (event.code === 'MediaPlayPause' || 
+          event.code === 'MediaTrackNext' || 
+          event.code === 'MediaTrackPrevious' ||
+          event.key === ' ' || // Space bar (some headphones send this)
+          event.code === 'KeyM' || // Some Boult models use this
+          event.keyCode === 179) { // Common media key code
         event.preventDefault();
         if (countdown === 0) {
           handleSOSPress();
@@ -25,26 +56,14 @@ const EmergencyButton: React.FC = () => {
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [countdown]);
-
-  // Handle Bluetooth headphone button press on mobile
-  useEffect(() => {
-    const handleMediaButton = (event: any) => {
-      if (event.type === 'media-button-press') {
+    // For Android Chrome
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('play', () => {
         if (countdown === 0) {
           handleSOSPress();
         }
-      }
-    };
-
-    // For Android Chrome
-    if ('MediaSession' in navigator) {
-      navigator.mediaSession.setActionHandler('play', () => {
+      });
+      navigator.mediaSession.setActionHandler('pause', () => {
         if (countdown === 0) {
           handleSOSPress();
         }
@@ -52,10 +71,53 @@ const EmergencyButton: React.FC = () => {
     }
 
     // For iOS/Safari
-    document.addEventListener('media-button-press', handleMediaButton);
+    document.addEventListener('playpressed', () => {
+      if (countdown === 0) {
+        handleSOSPress();
+      }
+    });
+
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener('media-button-press', handleMediaButton);
+      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('playpressed', () => {});
+    };
+  }, [countdown]);
+
+  // Handle long press for Boult Audio (some models require long press)
+  useEffect(() => {
+    let pressTimer: NodeJS.Timeout;
+
+    const handlePressStart = () => {
+      pressTimer = setTimeout(() => {
+        if (countdown === 0) {
+          handleSOSPress();
+        }
+      }, 1000); // 1 second long press
+    };
+
+    const handlePressEnd = () => {
+      clearTimeout(pressTimer);
+    };
+
+    // Add event listeners for both key and touch events
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'MediaPlayPause' || e.key === ' ') {
+        handlePressStart();
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      if (e.code === 'MediaPlayPause' || e.key === ' ') {
+        handlePressEnd();
+      }
+    });
+
+    return () => {
+      document.removeEventListener('keydown', () => {});
+      document.removeEventListener('keyup', () => {});
+      clearTimeout(pressTimer);
     };
   }, [countdown]);
 
@@ -141,6 +203,14 @@ const EmergencyButton: React.FC = () => {
           )}
         </button>
         
+        {headphoneConnected && (
+          <div className={`absolute -bottom-8 left-0 right-0 text-center text-xs ${
+            isDark ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            Press headphone button to trigger
+          </div>
+        )}
+        
         {countdown > 0 && (
           <>
             <div className="absolute inset-0 border-8 border-red-400/30 rounded-full animate-ping opacity-0"></div>
@@ -181,7 +251,9 @@ const EmergencyButton: React.FC = () => {
             <AlertTriangle className="w-4 h-4 mr-2" />
             {countdown > 0 
               ? `Emergency alert will activate in ${countdown}s...` 
-              : 'Press and hold SOS button or headphone play button for emergency'}
+              : headphoneConnected 
+                ? 'Press SOS button or headphone play button for emergency'
+                : 'Press and hold SOS button for emergency'}
           </p>
         </div>
       </div>
