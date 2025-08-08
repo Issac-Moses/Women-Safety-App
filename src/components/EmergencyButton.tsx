@@ -13,7 +13,52 @@ const EmergencyButton: React.FC = () => {
   const { location, getCurrentLocation } = useLocation();
   const { isDark } = useTheme();
 
-  
+  // Handle Bluetooth headphone button press
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check for media key events (play/pause button on headphones)
+      if (event.code === 'MediaPlayPause' || event.code === 'MediaTrackNext') {
+        event.preventDefault();
+        if (countdown === 0) {
+          handleSOSPress();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [countdown]);
+
+  // Handle Bluetooth headphone button press on mobile
+  useEffect(() => {
+    const handleMediaButton = (event: any) => {
+      if (event.type === 'media-button-press') {
+        if (countdown === 0) {
+          handleSOSPress();
+        }
+      }
+    };
+
+    // For Android Chrome
+    if ('MediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('play', () => {
+        if (countdown === 0) {
+          handleSOSPress();
+        }
+      });
+    }
+
+    // For iOS/Safari
+    document.addEventListener('media-button-press', handleMediaButton);
+
+    return () => {
+      document.removeEventListener('media-button-press', handleMediaButton);
+    };
+  }, [countdown]);
+
   useEffect(() => {
     if (!isActivated) return;
     
@@ -58,14 +103,11 @@ const EmergencyButton: React.FC = () => {
         'Unable to determine location'}\n` +
       `⏰ Time: ${new Date().toLocaleString()}`;
     
-    
     user?.emergencyContacts?.forEach(contact => {
       console.log(`Emergency alert sent to ${contact.name} (${contact.phone}): ${alertMessage}`);
     });
     
-    
     console.log(`Calling emergency services at ${user?.phone || 'unknown number'}`);
-    
     
     setShowConfirmation(true);
     setTimeout(() => setShowConfirmation(false), 5000);
@@ -78,7 +120,6 @@ const EmergencyButton: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center space-y-6">
-      
       <div className="relative">
         <button
           onTouchStart={handleSOSPress}
@@ -100,7 +141,6 @@ const EmergencyButton: React.FC = () => {
           )}
         </button>
         
-        
         {countdown > 0 && (
           <>
             <div className="absolute inset-0 border-8 border-red-400/30 rounded-full animate-ping opacity-0"></div>
@@ -109,10 +149,8 @@ const EmergencyButton: React.FC = () => {
         )}
       </div>
       
-      
       <div className={`w-full max-w-md p-4 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg transition-all`}>
         <div className="grid grid-cols-2 gap-4">
-          
           <div className={`p-3 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-gray-100'} flex items-center space-x-3`}>
             <div className={`p-2 rounded-full ${location ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500'}`}>
               <MapPin className="w-5 h-5" />
@@ -124,7 +162,6 @@ const EmergencyButton: React.FC = () => {
               </p>
             </div>
           </div>
-          
           
           <div className={`p-3 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-gray-100'} flex items-center space-x-3`}>
             <div className={`p-2 rounded-full ${user?.emergencyContacts?.length ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}`}>
@@ -139,17 +176,15 @@ const EmergencyButton: React.FC = () => {
           </div>
         </div>
         
-        
         <div className="mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
           <p className={`text-sm ${isDark ? 'text-red-300' : 'text-red-600'} flex items-center`}>
             <AlertTriangle className="w-4 h-4 mr-2" />
             {countdown > 0 
               ? `Emergency alert will activate in ${countdown}s...` 
-              : 'Press and hold SOS button for emergency'}
+              : 'Press and hold SOS button or headphone play button for emergency'}
           </p>
         </div>
       </div>
-      
       
       {showConfirmation && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -196,7 +231,6 @@ const EmergencyButton: React.FC = () => {
           </div>
         </div>
       )}
-      
       
       {countdown > 0 && (
         <button
