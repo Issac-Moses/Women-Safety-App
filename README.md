@@ -3,6 +3,18 @@
 ![App Logo](./src/assets/logo.png)
 
 A comprehensive safety application designed to empower women with emergency tools, location tracking, and instant alerts.
+# Screen shots
+<p float="left">
+  <img src="./screenshots/1.jpg" width="250" />
+  <img src="./screenshots/2.jpg" width="250" />
+  <img src="./screenshots/3.jpg" width="250" />
+  <img src="./screenshots/4.jpg" width="250" />
+  <img src="./screenshots/5.jpg" width="250" />
+  <img src="./screenshots/6.jpg" width="250" />
+  <img src="./screenshots/7.jpg" width="250" />
+  <img src="./screenshots/8.jpg" width="250" />
+</p>
+
 
 ## Features
 
@@ -69,15 +81,6 @@ A comprehensive safety application designed to empower women with emergency tool
 - **Email**: demo@womensafety.com
 - **Password**: demo123
 
-## Screenshots
-![App Logo](./screenshots/1.jpg)
-![App Logo](./screenshots/2.jpg)
-![App Logo](./screenshots/3.jpg)
-![App Logo](./screenshots/4.jpg)
-![App Logo](./screenshots/5.jpg)
-![App Logo](./screenshots/6.jpg)
-![App Logo](./screenshots/7.jpg)
-![App Logo](./screenshots/8.jpg)
 
 ## Project Structure
 - ```bash
