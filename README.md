@@ -2,7 +2,7 @@
 
 <img src="./src/assets/logo.png" width="450"/>
 - A comprehensive safety application designed to empower women with emergency tools, location tracking, and instant alerts.
-# Screen shots
+
 
 # Screen shots
 <p float="left">
